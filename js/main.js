@@ -7,6 +7,8 @@ const editForm = document.querySelector('#edit-form');
 const editInput = document.querySelector('#edit-input');
 const cancelEditBtn = document.querySelector('#cancel-edit-btn');
 
+let oldInputValue;
+
 /* Funções */
 const saveTodo = (text)=>{
     const todo = document.createElement("div");
@@ -33,6 +35,26 @@ const saveTodo = (text)=>{
     todoInput.value = '';
     todoInput.focus();
 }
+
+const toggleForms = ()=>{
+    editForm.classList.toggle('hide');
+    todoForm.classList.toggle('hide');
+    todoList.classList.toggle('hide');
+}
+
+const updateTodo = (text) =>{
+    const todos = document.querySelectorAll('.todo');
+
+    todos.forEach((todo)=>{
+
+        let todoTitle = todo.querySelector('h3');
+
+        if(todoTitle.innerHTML === oldInputValue){
+            todoTitle.innerText = text;
+        }
+    })
+}
+
 /* Eventos */
 
 
@@ -49,18 +71,42 @@ todoForm.addEventListener("submit", (evento)=>{
 document.addEventListener('click',(evento)=>{
     const elemento = evento.target;
     const parenteElemento = elemento.closest("div");
+    let todoTitle;
 
-/* Finalizado */
+    if(parenteElemento && parenteElemento.querySelector('h3')){
+        todoTitle = parenteElemento.querySelector('h3').innerHTML;
+    }
+
+    /* Finalizado */
     if(elemento.classList.contains("finish-todo")){
         parenteElemento.classList.toggle('done');
     }
-/* Edição */
+    /* Edição */
     if(elemento.classList.contains("edit-todo")){
-
+        toggleForms();
+        editInput.value = todoTitle;
+        oldInputValue = todoTitle;
     }
- /* Excluir */
+    /* Excluir */
     if(elemento.classList.contains("remove-todo")){
         parenteElemento.remove();
     }   
 
+})
+
+cancelEditBtn.addEventListener("click",(evento)=>{
+    evento.preventDefault();
+    toggleForms();
+})
+
+editForm.addEventListener('submit',(evento)=>{
+    evento.preventDefault();
+
+    const editInputValue = editInput.value;
+
+    if(editInputValue){
+        updateTodo(editInputValue);
+    }
+
+    toggleForms();
 })
