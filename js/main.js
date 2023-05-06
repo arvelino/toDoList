@@ -45,3 +45,22 @@ todoForm.addEventListener("submit", (evento)=>{
         saveTodo(inputValue);
     }
 });
+
+document.addEventListener('click',(evento)=>{
+    const elemento = evento.target;
+    const parenteElemento = elemento.closest("div");
+
+/* Finalizado */
+    if(elemento.classList.contains("finish-todo")){
+        parenteElemento.classList.toggle('done');
+    }
+/* Edição */
+    if(elemento.classList.contains("edit-todo")){
+
+    }
+ /* Excluir */
+    if(elemento.classList.contains("remove-todo")){
+        parenteElemento.remove();
+    }   
+
+})
