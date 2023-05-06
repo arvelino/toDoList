@@ -42,7 +42,7 @@ input,select{
     padding: 0.25rem 0.5rem;
 }
 
-.hide{ /* esconde o form de editar */
+.hide,#hide{ /* esconde o form de editar */
     display: none;
 }
 

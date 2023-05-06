@@ -6,17 +6,30 @@ const todoList = document.querySelector('#todo-list');
 const editForm = document.querySelector('#edit-form');
 const editInput = document.querySelector('#edit-input');
 const cancelEditBtn = document.querySelector('#cancel-edit-btn');
+const filter = document.querySelector('#filter-select');
+const memoria = localStorage;
+const memoria2 = localStorage;
 
 let oldInputValue;
+let id =0;
+
+/* reinicia o localStorege */
+// memoria.clear();
+
 
 /* Funções */
-const saveTodo = (text)=>{
+const saveTodo = (text, numId)=>{
     const todo = document.createElement("div");
     todo.classList.add("todo");
 
     const todoTitle = document.createElement("h3");
     todoTitle.innerText = text;
     todo.appendChild(todoTitle)
+
+    const inputId = document.createElement('input');
+    inputId.classList.add('hide');
+    inputId.innerText = numId;
+    todo.appendChild(inputId);
 
     const doneBtn = document.createElement('button');
     doneBtn.classList.add('finish-todo');
@@ -46,7 +59,6 @@ const updateTodo = (text) =>{
     const todos = document.querySelectorAll('.todo');
 
     todos.forEach((todo)=>{
-
         let todoTitle = todo.querySelector('h3');
 
         if(todoTitle.innerHTML === oldInputValue){
@@ -55,16 +67,24 @@ const updateTodo = (text) =>{
     })
 }
 
+const buscarMemoria = ()=>{
+    for(let i=0;i<memoria.length;i++){
+        console.log(memoria[i]);
+    }
+}
+
+
 /* Eventos */
-
-
 
 todoForm.addEventListener("submit", (evento)=>{
     evento.preventDefault();
     const inputValue = todoInput.value;
     
     if(inputValue){
-        saveTodo(inputValue);
+        saveTodo(inputValue,id);
+        memoria.setItem(id,inputValue);
+        memoria2.setItem(id,inputValue);
+        id++;
     }
 });
 
@@ -89,16 +109,22 @@ document.addEventListener('click',(evento)=>{
     }
     /* Excluir */
     if(elemento.classList.contains("remove-todo")){
+        
+        const valorId = parenteElemento.querySelector('input').innerText;
+        buscarMemoria();
+        memoria.removeItem(valorId);
         parenteElemento.remove();
     }   
 
 })
 
+
+/* evento para cancelar edição */
 cancelEditBtn.addEventListener("click",(evento)=>{
     evento.preventDefault();
     toggleForms();
 })
-
+/* evento para editar formulario */
 editForm.addEventListener('submit',(evento)=>{
     evento.preventDefault();
 
@@ -109,4 +135,42 @@ editForm.addEventListener('submit',(evento)=>{
     }
 
     toggleForms();
+})
+
+/* filter */
+filter.addEventListener('change',(evento)=>{
+    const valorFiltro = evento.target.value;
+    const listaTarefas = document.querySelectorAll('.todo');
+
+    if(valorFiltro =='done'){
+        listaTarefas.forEach((e) =>{
+            const classEl = e.classList 
+            if(!classEl.contains('done')){  
+                classEl.add('hide');
+                e.id = 'hide';
+            }
+        })
+
+    }
+    if(valorFiltro =='all'){
+        listaTarefas.forEach((e) =>{
+            const classEl = e.classList
+            classEl.toggle('hide');
+            e.id = '';
+        })
+    }
+    if(valorFiltro =='todo'){
+        listaTarefas.forEach((e) =>{
+            const classEl = e.classList
+            if(classEl.contains('done')){  
+                classEl.add('hide');
+                e.id = 'hide';
+            }else{
+                classEl.remove('hide');
+                e.id = '';
+            }
+        })
+
+    }
+
 })
