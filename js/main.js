@@ -8,10 +8,10 @@ const editInput = document.querySelector('#edit-input');
 const cancelEditBtn = document.querySelector('#cancel-edit-btn');
 const filter = document.querySelector('#filter-select');
 const memoria = localStorage;
-const memoria2 = localStorage;
+const valoresMemoria =''
 
 let oldInputValue;
-let id =0;
+let id = memoria.length;
 
 /* reinicia o localStorege */
 // memoria.clear();
@@ -67,15 +67,9 @@ const updateTodo = (text) =>{
     })
 }
 
-const buscarMemoria = ()=>{
-    for(let i=0;i<memoria.length;i++){
-        console.log(memoria[i]);
-    }
-}
-
-
 /* Eventos */
 
+/* Inclui as tarefas na página e na memória */
 todoForm.addEventListener("submit", (evento)=>{
     evento.preventDefault();
     const inputValue = todoInput.value;
@@ -83,7 +77,6 @@ todoForm.addEventListener("submit", (evento)=>{
     if(inputValue){
         saveTodo(inputValue,id);
         memoria.setItem(id,inputValue);
-        memoria2.setItem(id,inputValue);
         id++;
     }
 });
@@ -100,6 +93,7 @@ document.addEventListener('click',(evento)=>{
     /* Finalizado */
     if(elemento.classList.contains("finish-todo")){
         parenteElemento.classList.toggle('done');
+        memoria.setItem()
     }
     /* Edição */
     if(elemento.classList.contains("edit-todo")){
@@ -148,6 +142,8 @@ filter.addEventListener('change',(evento)=>{
             if(!classEl.contains('done')){  
                 classEl.add('hide');
                 e.id = 'hide';
+            }else{
+                e.id="";
             }
         })
 
@@ -174,3 +170,11 @@ filter.addEventListener('change',(evento)=>{
     }
 
 })
+
+/* atualiza os dados da memória */
+window.onload = (evento)=>{
+    for(let i=0;i<memoria.length;i++){
+        saveTodo(memoria.getItem(i),memoria.key(i));
+    }
+
+}
