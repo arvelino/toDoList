@@ -105,7 +105,6 @@ document.addEventListener('click',(evento)=>{
     if(elemento.classList.contains("remove-todo")){
         
         const valorId = parenteElemento.querySelector('input').innerText;
-        buscarMemoria();
         memoria.removeItem(valorId);
         parenteElemento.remove();
     }   
