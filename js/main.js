@@ -6,12 +6,13 @@ const todoList = document.querySelector('#todo-list');
 const editForm = document.querySelector('#edit-form');
 const editInput = document.querySelector('#edit-input');
 const cancelEditBtn = document.querySelector('#cancel-edit-btn');
+
 const filter = document.querySelector('#filter-select');
 const memoria = localStorage;
-const valoresMemoria =''
-
+let valorMemoria =[];
 let oldInputValue;
 let id = memoria.length;
+let chave = 0;
 
 /* reinicia o localStorege */
 // memoria.clear();
@@ -21,10 +22,9 @@ let id = memoria.length;
 const saveTodo = (text, numId)=>{
     const todo = document.createElement("div");
     todo.classList.add("todo");
-
     const todoTitle = document.createElement("h3");
     todoTitle.innerText = text;
-    todo.appendChild(todoTitle)
+    todo.appendChild(todoTitle);
 
     const inputId = document.createElement('input');
     inputId.classList.add('hide');
@@ -75,8 +75,9 @@ todoForm.addEventListener("submit", (evento)=>{
     const inputValue = todoInput.value;
     
     if(inputValue){
+        valorMemoria = [id,inputValue];
         saveTodo(inputValue,id);
-        memoria.setItem(id,inputValue);
+        memoria.setItem(id,JSON.stringify(valorMemoria));
         id++;
     }
 });
@@ -93,7 +94,6 @@ document.addEventListener('click',(evento)=>{
     /* Finalizado */
     if(elemento.classList.contains("finish-todo")){
         parenteElemento.classList.toggle('done');
-        memoria.setItem()
     }
     /* Edição */
     if(elemento.classList.contains("edit-todo")){
@@ -173,7 +173,8 @@ filter.addEventListener('change',(evento)=>{
 /* atualiza os dados da memória */
 window.onload = (evento)=>{
     for(let i=0;i<memoria.length;i++){
-        saveTodo(memoria.getItem(i),memoria.key(i));
+        const valoresMemoria = JSON.parse(memoria.getItem(i));
+        saveTodo(valoresMemoria[1],memoria.key(i));
     }
-
 }
+
