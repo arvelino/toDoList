@@ -1,8 +1,9 @@
 
 # Lista de tarefas -  TO-DO List
 
-Ferramenta para listar as tarefas pendentes do dia a dia.  
+Ferramenta para listar as tarefas pendentes do dia a dia. 
 
+![display-todo](https://github.com/arvelino/toDoList/assets/37750972/2934ccb4-d451-42bd-a917-e1e36f8f90e3)
 
 ## Funcionalidades
 
