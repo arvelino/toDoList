@@ -9,7 +9,8 @@
 }
 
 body{
-    background-color:#cccccc;
+    background-color: #7B4AE2;
+    background-image: linear-gradient(bottom,#ccc, #f2f2f2);
 }
 
 button{
@@ -51,9 +52,10 @@ input,select{
 .todo-container{
     max-width: 450px;
     margin: 3rem auto;
-    background-color: #fdfdfd;
+    background-color: #ffffffee;
     padding: 1.5rem;
-    border-radius: 15px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 1px black;
 }
 
 .todo-container header{

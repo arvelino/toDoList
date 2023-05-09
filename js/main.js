@@ -9,9 +9,11 @@ const cancelEditBtn = document.querySelector('#cancel-edit-btn');
 
 const filter = document.querySelector('#filter-select');
 const memoria = localStorage;
-let valorMemoria =[];
+let buscarMemoria = '';
+let arrayMemoria=[];
+let valorMemoria ={};
 let oldInputValue;
-let id = memoria.length;
+let id = 0;
 let chave = 0;
 
 /* reinicia o localStorege */
@@ -75,13 +77,20 @@ todoForm.addEventListener("submit", (evento)=>{
     const inputValue = todoInput.value;
     
     if(inputValue){
-        valorMemoria = [id,inputValue];
+        if(memoria.getItem(0)){
+            arrayMemoria = JSON.parse(memoria.getItem(0));
+            id = arrayMemoria.length
+        }
+        valorMemoria ={"id":`${id}`,"valor":`${inputValue}`};
+        arrayMemoria.push(valorMemoria);
         saveTodo(inputValue,id);
-        memoria.setItem(id,JSON.stringify(valorMemoria));
+        memoria.setItem(0,JSON.stringify(arrayMemoria));
+        buscarMemoria = JSON.parse(memoria.getItem(0));
         id++;
     }
 });
 
+/* Edita as tarefas */
 document.addEventListener('click',(evento)=>{
     const elemento = evento.target;
     const parenteElemento = elemento.closest("div");
@@ -94,6 +103,7 @@ document.addEventListener('click',(evento)=>{
     /* Finalizado */
     if(elemento.classList.contains("finish-todo")){
         parenteElemento.classList.toggle('done');
+
     }
     /* Edição */
     if(elemento.classList.contains("edit-todo")){
@@ -105,7 +115,21 @@ document.addEventListener('click',(evento)=>{
     if(elemento.classList.contains("remove-todo")){
         
         const valorId = parenteElemento.querySelector('input').innerText;
-        memoria.removeItem(valorId);
+        console.log(valorId);
+        console.log(buscarMemoria);
+        buscarMemoria.forEach(item=>{
+            // console.log(item);
+            if(valorId==item.id){
+                const ind = buscarMemoria.findIndex(i=>i.id==valorId);
+                buscarMemoria.splice(ind,1);
+                console.log('entrou');
+                console.log(buscarMemoria);
+                const updateMemoria = buscarMemoria;
+                memoria.setItem(0,JSON.stringify(updateMemoria));
+                
+            }
+            
+        })
         parenteElemento.remove();
     }   
 
@@ -171,10 +195,16 @@ filter.addEventListener('change',(evento)=>{
 })
 
 /* atualiza os dados da memória */
-window.onload = (evento)=>{
-    for(let i=0;i<memoria.length;i++){
-        const valoresMemoria = JSON.parse(memoria.getItem(i));
-        saveTodo(valoresMemoria[1],memoria.key(i));
+window.onload = ()=>{
+    
+    if(memoria.getItem(0)){
+        id = arrayMemoria.length;
+        buscarMemoria = JSON.parse(memoria.getItem(0));
+        buscarMemoria.forEach((item)=>{    
+            saveTodo(item.valor,item.id);
+        })
+
     }
 }
 
+// memoria.clear();
